@@ -1,15 +1,16 @@
 const router = require('express').Router();
-const { verifyToken, isModerator, isAdmin } = require('../middlewares/authJwt')
+const { verifyToken } = require('../middlewares/authJwt')
+const { isModerator, isAdmin } = require('../middlewares/checkRole')
 const productsController = require('../controllers/products.controller');
 
 
-router.get('/', productsController.getProducts);
+router.get('/', verifyToken , productsController.getProducts);
+
+router.get('/:productId', verifyToken , productsController.getProductById);
 
 router.post('/', [verifyToken, isAdmin] , productsController.createProduct);
 
-router.get('/:productId', productsController.getProductById);
-
-router.put('/:productId', [verifyToken, isModerator], productsController.upddateProductById);
+router.put('/:productId', [verifyToken, isModerator], productsController.updateProductById);
 
 router.delete('/:productId', [verifyToken, isAdmin], productsController.deleteProductById);
 

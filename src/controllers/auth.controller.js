@@ -6,7 +6,7 @@ const Role = require('../models/role');
  /*****  SIGN UP *****/  
  /********************/  
 const signUp = async(req, res) => {
-    const { username, email, password, roles} = req.body;
+    const { username, email, password } = req.body;
     
     const newUser = new User({
         username,
@@ -14,14 +14,9 @@ const signUp = async(req, res) => {
         password : User.encryptPassword(password)
     });
 
-    if(roles){
-        const foundRoles = await Role.find({ name :{ $in: roles} })
-        newUser.roles = foundRoles.map(role => role._id)
-    }else{
-        const role = await Role.findOne({ name : 'user'})
-        newUser.roles = [role._id]
-    }
-
+    const role = await Role.findOne({ name : 'user'})
+    newUser.roles = [role._id]
+    
     const savedUser = await newUser.save();
 
     const token = jwt.sign( {id : savedUser._id}, process.env.SECRET_TOKEN, {
@@ -29,7 +24,7 @@ const signUp = async(req, res) => {
     })
 
     res.json({
-        message : "Sign-Up",
+        ok : true,
         token
     })
 }
@@ -40,6 +35,7 @@ const signUp = async(req, res) => {
 const signIn = async(req, res) => {
     
     const userFound = await User.findOne({ email: req.body.email}).populate('roles')
+    
     if(!userFound){
         return res.status(404).json({
             message : 'User not found'
@@ -50,7 +46,6 @@ const signIn = async(req, res) => {
 
     if (!matchPassword) {
         return res.status(400).json({
-            token : null,
             message : 'Invalid credentials'
         })
     }
@@ -60,6 +55,7 @@ const signIn = async(req, res) => {
     });
     
     res.json({
+        ok : true,
         token
     })
 }

@@ -1,17 +1,15 @@
 const router = require('express').Router();
 const authController = require('../controllers/auth.controller');
-const { verifyToken, isAdmin } = require('../middlewares/authJwt');
-const { checkIfRoleExists, checkDuplicateUsernameOrEmail } = require('../middlewares/verifySignup');
+const { checkInputsSignIn } = require('../middlewares/verifySignin');
+const { checkDuplicateUsernameOrEmail, checkInputsSignUp } = require('../middlewares/verifySignup');
 
-router.post('/signup', [
-    verifyToken,
-    isAdmin,
-    checkIfRoleExists, 
+router.post('/signup', [ 
+    checkInputsSignUp,
     checkDuplicateUsernameOrEmail
 ] ,authController.signUp);
 
 
-router.post('/signin', authController.signIn);
+router.post('/signin', checkInputsSignIn ,authController.signIn);
 
 
 module.exports = router

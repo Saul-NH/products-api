@@ -33,7 +33,7 @@ const getProductById = async(req, res) => {
  /************************/  
  /* UPDATE-PRODUCT-BY-ID */  
  /************************/ 
-const upddateProductById = async(req, res) => {
+const updateProductById = async(req, res) => {
     const updatedProduct = await Product.findByIdAndUpdate(req.params.productId, req.body, {
         new : true});
 
@@ -56,6 +56,6 @@ module.exports = {
     createProduct,
     getProducts,
     getProductById,
-    upddateProductById,
+    updateProductById,
     deleteProductById      
 }
