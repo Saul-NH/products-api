@@ -28,6 +28,18 @@ const createUser = async(req, res) => {
     }
 }
 
+/*********************/  
+/***** GET USERS *****/  
+/*********************/
+const getUsers = async(req, res) => {
+    const users = await User.find({}).populate('roles')
+    console.log(users);
+    res.json({
+        users
+    })
+}
+
 module.exports = {
-    createUser
+    createUser,
+    getUsers
 }

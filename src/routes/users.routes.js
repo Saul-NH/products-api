@@ -20,4 +20,13 @@ router.post('/',[
     checkDuplicateUsernameOrEmail 
 ] , usersController.createUser);
 
+/*********************/  
+/***** GET USERS *****/  
+/*********************/
+router.get('/', [
+    verifyToken, 
+    isAdmin,
+], usersController.getUsers);
+
+
 module.exports = router;
