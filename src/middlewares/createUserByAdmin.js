@@ -32,20 +32,7 @@ const checkIfRoleExists = async(req, res, next) => {
     next();
 }
 
-const checkInputs = (req, res, next) => {
-    const { username, email, password, roles } = req.body
-
-    if (!username || !email || !password || !roles || roles.length<1) {
-        return res.status(400).json({
-            ok : false,
-            message : 'You need username, email, password and roles'
-        })
-    }
-    next()
-}
-
 module.exports = {
     checkDuplicateUsernameOrEmail,
     checkIfRoleExists,
-    checkInputs
 }

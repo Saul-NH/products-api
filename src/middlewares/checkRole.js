@@ -26,9 +26,9 @@ const isAdmin = async(req, res, next) => {
     }
 
     const roles = await Role.find({_id : { $in : user.roles} })
-    const hasModeratorRole = roles.find(item => item.name === 'admin');
+    const hasAdminRole = roles.find(item => item.name === 'admin');
     
-    if (!hasModeratorRole) {
+    if (!hasAdminRole) {
         return res.status(403).json('Unauthorized');
     }
 

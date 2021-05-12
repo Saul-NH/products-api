@@ -1,15 +1,29 @@
 const router = require('express').Router();
 const authController = require('../controllers/auth.controller');
-const { checkInputsSignIn } = require('../middlewares/verifySignin');
-const { checkDuplicateUsernameOrEmail, checkInputsSignUp } = require('../middlewares/verifySignup');
 
-router.post('/signup', [ 
-    checkInputsSignUp,
+const { signUpValidationArray } = require('../libs/signUpValidationArray');
+const { signInValidationArray } = require('../libs/signInValidationArray');
+
+const { checkDuplicateUsernameOrEmail } = require('../middlewares/verifySignup');
+const {checkValidationsInputs} = require('../middlewares/checkValidationsInputs');
+
+
+ /*********************/  
+ /*****  SIGN-UP  *****/  
+ /*********************/
+router.post('/signup', [
+    signUpValidationArray, 
+    checkValidationsInputs,
     checkDuplicateUsernameOrEmail
 ] ,authController.signUp);
 
-
-router.post('/signin', checkInputsSignIn ,authController.signIn);
+ /*********************/  
+ /*****  SIGN-IN  *****/  
+ /*********************/
+router.post('/signin', [
+    signInValidationArray,
+    checkValidationsInputs
+] ,authController.signIn);
 
 
 module.exports = router

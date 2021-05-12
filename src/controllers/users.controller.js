@@ -1,10 +1,11 @@
 const User = require('../models/user');
 const Role = require('../models/role');
+const { validationResult } = require('express-validator')
 
  /*********************/  
  /**** CREATE USER ****/  
  /*********************/  
-const createUser = async(req, res) => {
+const createUser = async(req, res) => {   
     const { username, email, password, roles} = req.body;
     
     try {
