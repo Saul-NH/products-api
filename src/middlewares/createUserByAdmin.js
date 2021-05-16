@@ -15,7 +15,6 @@ const checkDuplicateUsernameOrEmail = async(req, res, next) => {
 const checkIfRoleExists = async(req, res, next) => {
     const roles = await Role.find();
     const rolesArray = roles.map(role => role.name)
-
     if (req.body.roles) {
         for(let i=0; i<req.body.roles.length; i++){
             if (!rolesArray.includes(req.body.roles[i])) {
@@ -24,9 +23,6 @@ const checkIfRoleExists = async(req, res, next) => {
                 })
             }
         }
-    }else{
-        
-        return res.json({message : 'The role is necesary'});
     }
 
     next();
