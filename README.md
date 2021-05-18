@@ -1,2 +1,2 @@
 # products-api
-Ejemplo de un API REST utilizando Node JS, Express JS, Mongoose
+Example of a REST API using Node JS, Express JS, Mongoose
