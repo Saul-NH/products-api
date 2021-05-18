@@ -1,9 +1,9 @@
 const router = require('express').Router();
 const usersController = require('../controllers/users.controller');
 
-const { createUserValidationArray } = require('../libs/createUserValidationArray');
-const { updateUserByIdValidationArray } = require('../libs/updateUserByIdValidationArray');
-const { objectIdFormatValidationArray } = require('../libs/objectIdFormatValidationArray');
+const { createUserValidationArray } = require('../utils/createUserValidationArray');
+const { updateUserByIdValidationArray } = require('../utils/updateUserByIdValidationArray');
+const { objectIdFormatValidationArray } = require('../utils/objectIdFormatValidationArray');
 
 const { isAdmin } = require('../middlewares/checkRole');
 const { verifyToken } = require('../middlewares/authJwt');

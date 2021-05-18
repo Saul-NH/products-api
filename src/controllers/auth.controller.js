@@ -6,35 +6,44 @@ const Role = require('../models/role');
  /*****  SIGN UP *****/  
  /********************/  
 const signUp = async(req, res) => {
-    const { username, email, password } = req.body;
+    try {
+        const { username, email, password } = req.body;
     
-    const newUser = new User({
-        username,
-        email,
-        password : User.encryptPassword(password)
-    });
+        const newUser = new User({
+            username,
+            email,
+            password : User.encryptPassword(password)
+        });
 
-    const role = await Role.findOne({ name : 'user'})
-    newUser.roles = [role._id]
+        const role = await Role.findOne({ name : 'user'})
+        newUser.roles = [role._id]
+        
+        const savedUser = await newUser.save();
+
+        const token = jwt.sign( {id : savedUser._id}, process.env.SECRET_TOKEN, {
+            expiresIn : process.env.EXPIRATION_TOKEN
+        })
+
+        res.status(200).json({
+            ok : true,
+            token
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message : 'Something was wrong'
+        })
+    }
     
-    const savedUser = await newUser.save();
-
-    const token = jwt.sign( {id : savedUser._id}, process.env.SECRET_TOKEN, {
-        expiresIn : process.env.EXPIRATION_TOKEN
-    })
-
-    res.json({
-        ok : true,
-        token
-    })
 }
 
  /********************/  
  /***** SIGN IN ******/  
  /********************/ 
 const signIn = async(req, res) => {
-    
-    const userFound = await User.findOne({ email: req.body.email}).populate('roles')
+    try {
+        const userFound = await User.findOne({ email: req.body.email}).populate('roles')
     
     if(!userFound){
         return res.status(404).json({
@@ -54,10 +63,18 @@ const signIn = async(req, res) => {
         expiresIn : process.env.EXPIRATION_TOKEN
     });
     
-    res.json({
+    res.status(200).json({
         ok : true,
         token
     })
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message : 'Something was wrong'
+        })
+    }
+    
 }
 
 module.exports = {

@@ -4,52 +4,91 @@ const Product = require('../models/product');
  /** CREATE-PRODUCT **/  
  /********************/ 
 const createProduct = async(req, res) => {
-    const newProduct = new Product(req.body);
-    const propductCreated = await newProduct.save()
-    res.status(201).json(propductCreated)
+    try {
+        const newProduct = new Product(req.body);
+        const propductCreated = await newProduct.save()
+        res.status(201).json(propductCreated)
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message : 'Something was wrong'
+        })
+    }
 }
 
  /********************/  
  /*** GET-PRODUCTS ***/  
  /********************/ 
 const getProducts = async(req, res) => {
-    const allPRoducts = await Product.find()
-    res.json(allPRoducts)
+    try {
+        const allPRoducts = await Product.find()
+        res.status(200).json(allPRoducts)
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message : 'Something was wrong'
+        })
+    }
 }
 
  /*********************/  
  /* GET-PRODUCT-BY-ID */  
  /*********************/ 
 const getProductById = async(req, res) => {
-    const product = await Product.findById(req.params.productId)
-    if(!product){
-        res.json({
-            message : "No se encontro el producto"
+    try {
+        const product = await Product.findById(req.params.productId)
+        if(!product){
+            res.status(404).json({
+                message : "Product not found"
+            })
+        }
+        res.status(200).json(product);
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message : 'Something was wrong'
         })
     }
-    res.json(product);
 }
 
  /************************/  
  /* UPDATE-PRODUCT-BY-ID */  
  /************************/ 
 const updateProductById = async(req, res) => {
-    const updatedProduct = await Product.findByIdAndUpdate(req.params.productId, req.body, {
-        new : true});
-
+    try {
+        const updatedProduct = await Product.findByIdAndUpdate(req.params.productId, req.body, {
+            new : true});
+    
         res.status(200).json(updatedProduct);
-
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message : 'Something was wrong'
+        })
+    }
 }
 
  /************************/  
  /* DELETE-PRODUCT-BY-ID */  
  /************************/
 const deleteProductById = async(req, res) => {
-    const deletedProduct = await Product.findByIdAndDelete(req.params.productId)
-    if(!deletedProduct){
-        return res.status(404).json('No se encontro el producto')
+    try {
+        const deletedProduct = await Product.findByIdAndDelete(req.params.productId)
+        if(!deletedProduct){
+            return res.status(404).json('Product not found')
+        }
+        res.status(200).json('Deleted product');
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message : 'Something was wrong'
+        })
     }
-    res.json('Producto eliminado');
 }
 
 module.exports = {

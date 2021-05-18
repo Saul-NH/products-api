@@ -1,8 +1,8 @@
 const router = require('express').Router();
 const authController = require('../controllers/auth.controller');
 
-const { signUpValidationArray } = require('../libs/signUpValidationArray');
-const { signInValidationArray } = require('../libs/signInValidationArray');
+const { signUpValidationArray } = require('../utils/signUpValidationArray');
+const { signInValidationArray } = require('../utils/signInValidationArray');
 
 const { checkDuplicateUsernameOrEmail } = require('../middlewares/verifySignup');
 const {checkValidationsInputs} = require('../middlewares/checkValidationsInputs');

@@ -19,11 +19,14 @@ const createUser = async(req, res) => {
     
         await newUser.save()
     
-        res.json({
+        res.status(201).json({
             message : 'User created'
         })
     } catch (error) {
         console.log(error);
+        res.status(500).json({
+            message : 'Something was wrong'
+        })
     }
 }
 
@@ -31,11 +34,19 @@ const createUser = async(req, res) => {
 /***** GET USERS *****/  
 /*********************/
 const getUsers = async(req, res) => {
-    const users = await User.find({}).populate('roles')
-    
-    res.json({
-        users
-    })
+    try {
+        const users = await User.find({}).populate('roles')
+        
+        res.status(200).json({
+            users
+        })
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message : 'Something was wrong'
+        }) 
+    }
 }
 
 /**********************/  
@@ -52,13 +63,14 @@ const getUserById = async(req, res) => {
         }
 
         return res.status(200).json({
-            ok : true,
             user : userFound
         });
 
     } catch (error) {
         console.log(error);
-        return res.status(500).json('Something was wrong')
+        res.status(500).json({
+            message : 'Something was wrong'
+        })
     }
 
 }
@@ -82,13 +94,14 @@ const updateUserById = async(req, res) => {
             })
         }
 
-        res.json({
+        res.status(200).json({
             user
         })
 
     } catch (error) {
 
         //Will be refactorized into an errorHandler
+        console.log(error)
         if (error.codeName === "DuplicateKey" && error.keyPattern.username === 1) {
             res.status(400).json({
                 message : 'This username is not available to use'
@@ -98,7 +111,6 @@ const updateUserById = async(req, res) => {
                     message : 'This email is not available to use'
                 })
             }
-        console.log(error)
     }
 }
 
@@ -114,11 +126,11 @@ const deleteUserById = async(req, res) => {
             })
         }
 
-        res.json({
+        res.status(200).json({
             message : 'User deleted successfully'
         })
     } catch (error) {
-        
+        console.log(error);
         res.status(500).json({
             message : 'Something was wrong'
         })
